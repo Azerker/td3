@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Menu de jeux</title>
+      <link rel="stylesheet" href="style-jeu.css">
+  </head>
+  <body>
+    <h1>Menu de jeux</h1>
+    <h2>Simon</h2>
+    <p>Le bouton au centre affiche la séquence à reproduire.</p>
+      <img src="img-simon.png" alt="image simon" width="100px"><br>
+    <button onclick="playGame1()">Jeu du Simon</button>
+
+    <h2>Frogger</h2>
+    <p>Évitez les obstacles et arrivez au bout du niveau.</p>
+      <img src="img-frogger.png" alt="image simon" width="200px"><br>
+    <button onclick="playGame2()">Frogger</button>
+
+    <script>
+      function playGame1() {
+        // Rediriger l'utilisateur vers la page du jeu 1
+        window.location.href = "jeudusimon.html";
+      }
+
+      function playGame2() {
+        // Rediriger l'utilisateur vers la page du jeu 2
+        window.location.href = "frogger.html";
+      }
+    </script>
+  </body>
+</html>
+
+
+
+
+
+

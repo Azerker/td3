@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Frogger Game</title>
+  </head>
+  <body>
+      <p>Frogger - Level 1</p>
+    <canvas id="gameCanvas" width="1250" height="600">
+        <style>
+      canvas {
+      border: 2px solid black;
+    }
+        </style>
+      </canvas>
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const CANVAS_WIDTH = canvas.width;
+const CANVAS_HEIGHT = canvas.height;
+
+class Frog {
+  constructor() {
+    this.width = 30;
+    this.height = 30;
+    this.x = CANVAS_WIDTH / 2 - this.width / 2;
+    this.y = CANVAS_HEIGHT - this.height - 10;
+    this.speed = 10;
+  }
+
+  moveUp() {
+    if (this.y > 0) {
+      this.y -= this.speed;
+    }
+  }
+
+  moveDown() {
+    if (this.y + this.height < CANVAS_HEIGHT) {
+      this.y += this.speed;
+    }
+  }
+
+  moveLeft() {
+    if (this.x > 0) {
+      this.x -= this.speed;
+    }
+  }
+
+  moveRight() {
+    if (this.x + this.width < CANVAS_WIDTH) {
+      this.x += this.speed;
+    }
+  }
+
+  draw() {
+    ctx.fillStyle = "green";
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+}
+
+class Obstacle {
+  constructor(x, y, speed, width, height) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.width = width;
+    this.height = height;
+  }
+
+  move() {
+    this.x -= this.speed;
+
+    // Vérifier si l'obstacle est sorti du canvas
+    if (this.x + this.width < 0) {
+      // Remettre l'obstacle à droite du canvas
+      this.x = CANVAS_WIDTH;
+    }
+  }
+
+  draw() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+}
+
+const frog = new Frog();
+
+const obstacles = [
+  new Obstacle(0, 100, 5, 50, 50),
+  new Obstacle(CANVAS_WIDTH - 50, 150, 7, 40, 40),
+  new Obstacle(0, 200, 3, 60, 60),
+  new Obstacle(CANVAS_WIDTH - 70, 250, 6, 30, 30),
+  new Obstacle(0, 300, 4, 70, 70),
+  new Obstacle(CANVAS_WIDTH - 90, 350, 8, 20, 20),
+];
+        
+let levelCompleted = false;
+        
+function checkCollision() {
+  for (const obstacle of obstacles) {
+    if (
+      frog.x < obstacle.x + obstacle.width &&
+      frog.x + frog.width > obstacle.x &&
+      frog.y < obstacle.y + obstacle.height &&
+      frog.y + frog.height > obstacle.y
+    ) {
+      // collision détectée, arrêter le jeu
+      cancelAnimationFrame(animationId);
+      alert("Game over!");
+      return;
+    }
+  }
+}
+
+function update() {
+  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  frog.draw();
+
+  for (const obstacle of obstacles) {
+    obstacle.move();
+    obstacle.draw();
+  }
+
+  checkCollision(); // vérifier la collision
+
+  if (frog.y < 20) {
+    // Le niveau est complété !
+    cancelAnimationFrame(animationId);
+    const button = document.createElement("button");
+    button.textContent = "Niveau suivant";
+    button.addEventListener("click", () => {
+        window.location.href = "froggerlvl2.html";
+      // Aller au niveau suivant
+      // ...
+      console.log("Niveau suivant");
+    });
+    const div = document.createElement("div");
+    div.textContent = "Niveau complété ! ";
+    div.appendChild(button);
+    document.body.appendChild(div);
+    return;
+  }
+
+  animationId = requestAnimationFrame(update);
+}
+        
+        function checkIfLevelCompleted() {
+  if (frog.y < 50) {
+    cancelAnimationFrame(animationId);
+      // afficher une alerte "Niveau complété !" avec un bouton "Niveau suivant"
+alert("Niveau complété !");
+const nextLevelButton = document.createElement("button");
+nextLevelButton.textContent = "Niveau suivant";
+nextLevelButton.onclick = goToNextLevel;
+document.body.appendChild(nextLevelButton);
+
+// faire clignoter le texte "Niveau complété !"
+function blinkText() {
+  const levelCompleteText = document.getElementById("levelCompleteText");
+  setInterval(() => {
+    levelCompleteText.style.visibility = levelCompleteText.style.visibility === "hidden" ? "visible" : "hidden";
+  }, 500);
+}
+
+blinkText();
+  }
+}
+
+let animationId = null;
+update();
+
+document.addEventListener("keydown", (event) => {
+  switch (event.key) {
+    case "ArrowUp":
+      frog.moveUp();
+      break;
+    case "ArrowDown":
+      frog.moveDown();
+      break;
+    case "ArrowLeft":
+      frog.moveLeft();
+      break;
+    case "ArrowRight":
+      frog.moveRight();
+      break;
+  }
+});
+
+        
+    </script>
+  </body>
+</html>
